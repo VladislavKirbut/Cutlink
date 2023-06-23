@@ -1,29 +1,14 @@
-CREATE TABLE user_link (
-    id BIGSERIAL PRIMARY KEY,
-    url TEXT NOT NULL UNIQUE
+CREATE SCHEMA cutlink;
+
+CREATE TABLE links (
+    user_url TEXT PRIMARY KEY,
+    new_url TEXT NOT NULL UNIQUE
 );
 
-CREATE TABLE generate_link (
-    id BIGSERIAL PRIMARY KEY,
-    url TEXT NOT NULL UNIQUE,
-    user_link_id INT REFERENCES user_link(id) ON DELETE CASCADE
-);
+INSERT INTO links (user_url, new_url)
+VALUES ('https://google.com', 'https://go');
 
-INSERT INTO user_link(url)
-VALUES ('https://google.com');
-
-INSERT INTO generate_link (url, user_link_id)
-VALUES ('test', 1);
-
-SELECT id,
-       url,
-       user_link_id
-FROM generate_link
-WHERE user_link_id = ?;
-
-SELECT generate_link.id,
-       generate_link.url,
-       user_link_id
-FROM generate_link
-JOIN user_link ul on generate_link.user_link_id = ul.id
-WHERE ul.url = 'https://google.com';
+SELECT user_url,
+       new_url
+FROM links
+WHERE user_url = ?;
