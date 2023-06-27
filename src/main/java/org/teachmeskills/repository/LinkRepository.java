@@ -1,26 +1,25 @@
-package repository;
+package org.teachmeskills.repository;
 
-import model.Link;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
+import org.teachmeskills.model.Link;
 import org.springframework.jdbc.core.JdbcOperations;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Optional;
 
+@AllArgsConstructor
+@Repository
 public class LinkRepository {
-
     private final JdbcOperations jdbcOps;
 
-    public LinkRepository(JdbcOperations jdbcOps) {
-        this.jdbcOps = jdbcOps;
-    }
-
-    public List<Link> getAllLinks(String url) {
-        return jdbcOps.query("""
+    public Optional<Link> getAllLinks(String url) {
+        return Optional.ofNullable(jdbcOps.queryForObject("""
                 SELECT user_url,
                        new_url
                 FROM link
                 WHERE user_url = ?;""",
-                this::mapToLink, url);
+                this::mapToLink, url));
     }
 
     public int addNewUrl(String userUrl, String newUrl) {

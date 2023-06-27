@@ -1,4 +1,4 @@
-package model;
+package org.teachmeskills.model;
 
 import lombok.Value;
 
