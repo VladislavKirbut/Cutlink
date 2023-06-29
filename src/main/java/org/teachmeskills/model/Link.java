@@ -1,9 +1,11 @@
 package org.teachmeskills.model;
 
-import lombok.Value;
+import lombok.*;
+import java.net.URI;
 
 @Value
 public class Link {
-    String userUrl;
-    String newUrl;
+    long id;
+    URI longUrl;
+    URI shortUrl;
 }
