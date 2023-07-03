@@ -1,6 +1,6 @@
 package org.teachmeskills.repository;
 
-import org.teachmeskills.model.Link;
+import org.teachmeskills.entity.Link;
 import java.net.URI;
 import java.util.Optional;
 

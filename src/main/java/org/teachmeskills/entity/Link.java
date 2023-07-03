@@ -1,4 +1,4 @@
-package org.teachmeskills.model;
+package org.teachmeskills.entity;
 
 import lombok.*;
 import java.net.URI;

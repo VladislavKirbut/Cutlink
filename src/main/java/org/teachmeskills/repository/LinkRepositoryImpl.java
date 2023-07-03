@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
-import org.teachmeskills.model.Link;
+import org.teachmeskills.entity.Link;
 
 import java.net.URI;
 import java.sql.ResultSet;
