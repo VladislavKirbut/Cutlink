@@ -1,11 +1,10 @@
 package org.teachmeskills.repository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 import org.teachmeskills.entity.Link;
-
 import java.net.URI;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,13 +12,13 @@ import java.util.Map;
 import java.util.Optional;
 
 @Profile({"local", "production"})
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Repository
 public class LinkRepositoryImpl implements LinkRepository {
     private final NamedParameterJdbcOperations jdbcOps;
 
     @Override
-    public Optional<Link> getLink(URI url) {
+    public Optional<Link> getShortLink(URI longUrl) {
         String sql = """
                 SELECT id,
                        long_url,
@@ -27,22 +26,39 @@ public class LinkRepositoryImpl implements LinkRepository {
                 FROM link
                 WHERE long_url = :url;""";
 
-        return jdbcOps.query(sql, Map.of("url", url.toString()), this::mapToLink)
+        return jdbcOps.query(sql, Map.of("url", longUrl.getHost()), this::mapToLink)
                 .stream()
                 .findFirst();
     }
 
     @Override
-    public URI addNewUrl(URI longUrl, URI shortUrl) {
+    public Optional<Link> getLongLink(String shortUrl) {
+        String sql = """
+                SELECT id,
+                       long_url,
+                       short_url
+                FROM link
+                WHERE short_url = :url;""";
+
+        return jdbcOps.query(sql, Map.of("url", shortUrl), this::mapToLink)
+                .stream()
+                .findFirst();
+    }
+
+
+    @Override
+    public Link addNewUrl(URI longUrl, String shortUrl) {
         String sql = """
                 INSERT INTO link (long_url, short_url)
                 VALUES (:long_url, :short_url)
-                RETURNING short_url""";
+                RETURNING id,
+                          long_url,
+                          short_url;""";
 
         return jdbcOps.queryForObject(sql, Map.of(
-                "long_url", longUrl.toString(),
-                "short_url", shortUrl.toString()),
-                URI.class);
+                "long_url", longUrl.getHost(),
+                "short_url", shortUrl),
+                this::mapToLink);
     }
 
     private Link mapToLink(ResultSet rs, int rowNum) throws SQLException {

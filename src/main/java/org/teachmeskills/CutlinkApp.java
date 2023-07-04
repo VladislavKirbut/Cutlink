@@ -2,18 +2,29 @@ package org.teachmeskills;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.teachmeskills.entity.Link;
 import org.teachmeskills.repository.LinkRepository;
+import org.teachmeskills.services.LinkService;
 
 import java.net.URI;
+import java.util.Optional;
 
 @SpringBootApplication
+@ConfigurationPropertiesScan
 public class CutlinkApp {
     public static void main(String[] args) {
-        ConfigurableApplicationContext context = SpringApplication.run(CutlinkApp.class, args);
+        var context = SpringApplication.run(CutlinkApp.class, args);
         LinkRepository repository = context.getBean("linkRepositoryImpl", LinkRepository.class);
+        LinkService linkServiceImpl = context.getBean("linkServiceImpl", LinkService.class);
 
-        URI uri = repository.addNewUrl(URI.create("https://google.com"), URI.create("gog"));
-        System.out.println(uri);
+        Link linkSer = linkServiceImpl.getLongUrl("14a8ec8");
+        System.out.println(linkSer);
+
+        Optional<Link> link1 = repository.getLongLink("14a8ec8");
+        link1.ifPresent(value -> System.out.println(value.getLongUrl()));
+
+        Optional<Link> link = repository.getShortLink(URI.create("https://hello.com"));
+        link.ifPresent(value -> System.out.println(value.getShortUrl()));
     }
 }
