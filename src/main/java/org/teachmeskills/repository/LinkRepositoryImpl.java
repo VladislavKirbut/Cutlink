@@ -18,7 +18,7 @@ public class LinkRepositoryImpl implements LinkRepository {
     private final NamedParameterJdbcOperations jdbcOps;
 
     @Override
-    public Optional<Link> getShortLink(URI longUrl) {
+    public Optional<Link> getLinkByLongUrl(URI longUrl) {
         String sql = """
                 SELECT id,
                        long_url,
@@ -32,7 +32,7 @@ public class LinkRepositoryImpl implements LinkRepository {
     }
 
     @Override
-    public Optional<Link> getLongLink(String shortUrl) {
+    public Optional<Link> getLinkByShortUrl(String shortUrl) {
         String sql = """
                 SELECT id,
                        long_url,
@@ -56,7 +56,7 @@ public class LinkRepositoryImpl implements LinkRepository {
                           short_url;""";
 
         return jdbcOps.queryForObject(sql, Map.of(
-                "long_url", longUrl.getHost(),
+                "long_url", longUrl,
                 "short_url", shortUrl),
                 this::mapToLink);
     }

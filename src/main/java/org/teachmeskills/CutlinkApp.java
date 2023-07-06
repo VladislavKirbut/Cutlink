@@ -21,10 +21,10 @@ public class CutlinkApp {
         Link linkSer = linkServiceImpl.getLongUrl("14a8ec8");
         System.out.println(linkSer);
 
-        Optional<Link> link1 = repository.getLongLink("14a8ec8");
+        Optional<Link> link1 = repository.getLinkByShortUrl("14a8ec8");
         link1.ifPresent(value -> System.out.println(value.getLongUrl()));
 
-        Optional<Link> link = repository.getShortLink(URI.create("https://hello.com"));
+        Optional<Link> link = repository.getLinkByLongUrl(URI.create("https://hello.com"));
         link.ifPresent(value -> System.out.println(value.getShortUrl()));
     }
 }

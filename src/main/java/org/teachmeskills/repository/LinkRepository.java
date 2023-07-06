@@ -5,7 +5,7 @@ import java.net.URI;
 import java.util.Optional;
 
 public interface LinkRepository {
-    Optional<Link> getShortLink(URI longUrl);
-    Optional<Link> getLongLink(String shortUrl);
+    Optional<Link> getLinkByLongUrl(URI longUrl);
+    Optional<Link> getLinkByShortUrl(String shortUrl);
     Link addNewUrl(URI longLink, String shortLink);
 }
