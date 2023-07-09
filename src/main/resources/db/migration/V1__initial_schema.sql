@@ -1,0 +1,5 @@
+CREATE TABLE link (
+    id BIGSERIAL PRIMARY KEY,
+    long_url TEXT NOT NULL UNIQUE,
+    short_url TEXT NOT NULL UNIQUE
+);
