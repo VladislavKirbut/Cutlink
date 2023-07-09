@@ -2,7 +2,6 @@ package org.teachmeskills.services;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,23 +28,18 @@ public class LinkServiceImpl implements LinkService {
         URI uri = new URI(longUrl);
         if (!isUrlValid(uri)) throw new IncorrectUrlException("Invalid url");
 
-        Optional<Link> link = linkRepository.getLinkByLongUrl(URI.create(longUrl));
+        Optional<Link> link = linkRepository.getLinkByLongUrl(uri);
         if(link.isPresent())
             return link.get();
         else {
-            String randomLink = UUID.randomUUID().toString().replace("-", "").substring(0, 7);
+            String randomLink = UUID.randomUUID().toString().replace("-", "").substring(0, 5);
             return linkRepository.addNewUrl(URI.create(longUrl), randomLink);
         }
     }
-
     @Override
     @Transactional
-    public Link getLongUrl(String shortUrl) throws URISyntaxException {
-        URI uri = new URI(shortUrl);
-        String host = uri.getHost();
-        if (host == null) throw new IncorrectUrlException("Invalid url");
-
-        Optional<Link> link = linkRepository.getLinkByShortUrl(host);
+    public Link getLongUrl(String shortUrl) {
+        Optional<Link> link = linkRepository.getLinkByShortUrl(shortUrl);
 
         if (link.isPresent()) return link.get();
         else throw new IncorrectUrlException("Invalid url or url doesn't exist");

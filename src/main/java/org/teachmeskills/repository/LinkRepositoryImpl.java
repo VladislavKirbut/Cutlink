@@ -26,7 +26,7 @@ public class LinkRepositoryImpl implements LinkRepository {
                 FROM link
                 WHERE long_url = :url;""";
 
-        return jdbcOps.query(sql, Map.of("url", longUrl.getHost()), this::mapToLink)
+        return jdbcOps.query(sql, Map.of("url", longUrl.toString()), this::mapToLink)
                 .stream()
                 .findFirst();
     }
@@ -56,7 +56,7 @@ public class LinkRepositoryImpl implements LinkRepository {
                           short_url;""";
 
         return jdbcOps.queryForObject(sql, Map.of(
-                "long_url", longUrl,
+                "long_url", longUrl.toString(),
                 "short_url", shortUrl),
                 this::mapToLink);
     }

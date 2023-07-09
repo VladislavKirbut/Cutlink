@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet"
+          th:href="@{/css/mainPage.css}">
+    <title>Cutlink</title>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-title">
+                CutLink
+            </div>
+        </div>
+    </header>
+    <section class="section">
+        <div class="container">
+            <div class="form">
+                <form th:href="@{/mainPage}"
+                      action="/mainPage"
+                      enctype="application/x-www-form-urlencoded"
+                      method="POST">
+                    <input type="text" name="longUrl" placeholder="Enter url:" />
+                    <button type="submit">Cut url</button>
+                </form>
+            </div>
+
+            <!--/*@thymesVar id="link" type="org.teachmeskills.entity.Link"*/-->
+            <div class="last_links">Last cut:</div>
+            <div th:if="${link != null}" class="links">
+                <a th:href="${link.getLongUrl()}"
+                   href="https://google.com"
+                   th:text="${link.getLongUrl()}" class="links-long_url">https://google.com</a>
+                <!--/*@thymesVar id="uri" type="java.net.URI"*/-->
+                <span th:text="${uri.toString() + link.getShortUrl()}">gog</span>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
